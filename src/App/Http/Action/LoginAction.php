@@ -33,10 +33,14 @@ class LoginAction implements RequestHandlerInterface
                     if ($username === $name && $password === $pass) {
                         $_SESSION['adminLoggedIn'] = $username;
                         return new RedirectResponse('/');
+                    } else {
+                        return new HtmlResponse($this->template->render('app/login', [
+                            'error' => 'Login or pass is invalid'
+                        ]));
                     }
                 }
             }
-            return new HtmlResponse($this->template->render('app/login', ['error' => 'Login or pass is invalid']));
+            return new HtmlResponse($this->template->render('app/login'));
         }
     }
 }
