@@ -1,0 +1,84 @@
+{% extends 'layout/default.html.twig' %}
+
+{% block title %}Quest List{% endblock %}
+
+{% block meta %}
+    <meta name="description" content="quest list page" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li class="active">Quest List</li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <h1>Quest List</h1>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" data-sort="id">#</th>
+            <th scope="col" data-sort="username">Username</th>
+            <th scope="col" data-sort="email">Email</th>
+            <th scope="col" data-sort="description">Description</th>
+            <th scope="col" data-sort="status">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+
+    {% for quest in quests %}
+        <tr {% if quest.completed %} class="table-success" {% endif %} data-url="{{ path('edit', {'quest' : quest.id}) }}">
+            <th scope="row">{{ quest.id }}</th>
+            <td>{{ quest.username }}</td>
+            <td>{{ quest.email }}</td>
+            <td>{{ quest.description }}</td>
+            <td>{% if quest.completed %} Completed {% else %} In Progress {% endif %}
+                {% if quest.editedByAdmin %}<br> Edited by Admin {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+
+        </tbody>
+    </table>
+
+    {% include 'share/pager.html.twig' with {
+        'pager': pager,
+        'main_route': 'home',
+        'route': 'home_page',
+        'sort': sort,
+        'order': order
+    } %}
+
+    <script>
+        $(document).ready(function() {
+            $('tbody tr').on('click', function (e) {
+                window.location.href = $(e.target).parent().data('url');
+            });
+
+            $('thead th').on('click', function (e) {
+                var currentOrder = '{{ order }}';
+                var currentSort = '{{ sort }}';
+                var currentPage = '{{ pager.getPage() }}';
+                var neededSort = $(e.target).data('sort');
+                var neededOrder = 'ASC';
+
+                if (neededSort == currentSort) {
+                    if (currentOrder == 'ASC') {
+                        neededOrder = 'DESC';
+                    }
+                }
+
+                window.location.href = '/page/' + currentPage + '-' + neededSort + '-' + neededOrder;
+            });
+
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('added')) {
+                alert('Quest successfully added to quest list!');
+            }
+            if (urlParams.has('logged_out')) {
+                alert('You has been successfully logged out')
+            }
+        });
+    </script>
+{% endblock %}

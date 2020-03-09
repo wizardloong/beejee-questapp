@@ -1,0 +1,72 @@
+{% extends 'layout/default.html.twig' %}
+
+{% block title %}Add New Quest{% endblock %}
+
+{% block meta %}
+    <meta name="description" content="add new quest page" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li><a href="{{ path('home') }}">Quest List</a></li>
+        <li class="active">Edit Quest</li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+
+    {% if errors is defined %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+
+    <form method="POST">
+        <div class="form-group row">
+            <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputUsername" placeholder="Username" name="username" value="{{ quest.username }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" value="{{ quest.email }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputDescription" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputDescription" placeholder="Description" name="description" value="{{ quest.description }}">
+            </div>
+        </div>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Status</legend>
+                <div class="col-sm-10">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="completed" id="gridRadios1" value="false" {% if not quest.isCompleted %} checked {% endif %}>
+                        <label class="form-check-label" for="gridRadios1">
+                            In Progress
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="completed" id="gridRadios2" value="true" {% if quest.isCompleted %} checked {% endif %}>
+                        <label class="form-check-label" for="gridRadios2">
+                            Completed
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
